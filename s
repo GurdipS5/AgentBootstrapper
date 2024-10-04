@@ -12,6 +12,8 @@ brew install kubeconform
 
 brew install krew
 
+krew install neat
+
 brew install git
 
 brew install kyverno

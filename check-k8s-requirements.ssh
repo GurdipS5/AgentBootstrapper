@@ -1,1 +1,35 @@
+#!/bin/bash
+
+# Path to the TeamCity agent properties file
+properties_file="/path/to/teamcity-agent.properties"
+
+# List of applications to check
+apps=("kubectl" "docker" "curl" "git" "vim")
+
+echo "Checking installed applications and updating $properties_file..."
+
+# Ensure the properties file exists
+touch "$properties_file"
+
+# Loop through the applications
+for app in "${apps[@]}"; do
+  if command -v "$app" &>/dev/null; then
+    echo "$app is installed"
+    value="true"
+  else
+    echo "$app is NOT installed"
+    value="false"
+  fi
+
+  # Update or add the property in the file
+  if grep -q "^${app}=" "$properties_file"; then
+    # Update the existing line
+    sed -i "s/^${app}=.*/${app}=${value}/" "$properties_file"
+  else
+    # Append a new line
+    echo "${app}=${value}" >> "$properties_file"
+  fi
+done
+
+echo "Update complete!"
 
